@@ -56,5 +56,3 @@ npm publish --access public
 -   Usa el sistema de workspaces (`pnpm`, `npm`, o `yarn`) para manejar dependencias internas.
 
 ---
-
-Desarrollado por [Systekia](https://github.com/systekia).
