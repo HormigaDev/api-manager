@@ -1,0 +1,15 @@
+{
+    "name": "@systekia/api-manager-websocket",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "author": "HormigDev",
+    "scripts": {
+        "build": "tsup"
+    },
+    "devDependencies": {
+        "typescript": "^5.8.3",
+        "tsup": "^8.5.0"
+    }
+}

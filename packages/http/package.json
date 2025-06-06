@@ -1,0 +1,23 @@
+{
+    "name": "@systekia/api-manager-http",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "author": "HormigDev",
+    "exports": {
+        ".": {
+            "import": "./dist/index.js",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --dts --tsconfig tsconfig.json",
+        "prepare": "npm run build"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "tsup": "^8.5.0",
+        "typescript": "^5.8.3"
+    }
+}
