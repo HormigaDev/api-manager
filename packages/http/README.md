@@ -1,17 +1,17 @@
-# @systekia/api-manager
+# @systekia/api-manager-http
 
-`@systekia/api-manager` es una librería HTTP extensible y modular para proyectos frontend (Next.js, React, Vue, Svelte, Nuxt.js), escrita en TypeScript y usable desde JavaScript.
+`@systekia/api-manager-http` es una librería HTTP extensible y modular para proyectos frontend (Next.js, React, Vue, Svelte, Nuxt.js), escrita en TypeScript y usable desde JavaScript.
 
 ## 🚀 Instalación
 
 ```bash
-npm install @systekia/api-manager
+npm install @systekia/api-manager-http
 ```
 
 ## 📦 Uso básico
 
 ```ts
-import { ApiManager } from '@systekia/api-manager';
+import { ApiManager } from '@systekia/api-manager-http';
 
 const api = new ApiManager({
     baseUrl: 'https://api.example.com',
@@ -74,7 +74,7 @@ ApiManagerErrors.Error;
 Esta librería está pensada para ser extendida. Por ejemplo, puedes usar una extensión opcional para WebSockets:
 
 ```ts
-import { withWebSocket } from '@systekia/api-manager/websocket';
+import { withWebSocket } from '@systekia/api-manager-http/websocket';
 
 const wsApi = withWebSocket(api, { url: 'wss://...' });
 wsApi.websocket.send('event', { foo: 'bar' });
