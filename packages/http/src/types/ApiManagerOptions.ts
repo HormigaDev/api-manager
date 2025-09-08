@@ -9,4 +9,5 @@ export interface ApiManagerOptions {
     auth?: AuthConfig;
     agent?: any;
     throwErrors?: boolean;
+    headers?: Record<string, string>;
 }

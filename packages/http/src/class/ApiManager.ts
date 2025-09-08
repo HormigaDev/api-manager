@@ -11,6 +11,7 @@ export class ApiManager {
     private auth: AuthConfig;
     private agent: any;
     private throwErrors: boolean;
+    private customHeaders: Record<string, string>;
     private listeners: { [key: string]: ErrorListener[] } = {};
 
     constructor(options: ApiManagerOptions) {
@@ -18,11 +19,24 @@ export class ApiManager {
         this.format = options.format || 'json';
         this.auth = options.auth || { type: 'cookie', credentials: 'include' };
         this.throwErrors = options.throwErrors ?? true;
+        this.customHeaders = options.headers || {};
     }
 
     on(event: ApiManagerErrors, listener: ErrorListener) {
         this.listeners[event] = this.listeners[event] || [];
         this.listeners[event].push(listener);
+    }
+
+    setHeader(name: string, value: string) {
+        this.customHeaders[name] = value;
+    }
+
+    removeHeader(name: string) {
+        delete this.customHeaders[name];
+    }
+
+    getCustomHeaders(): Record<string, string> {
+        return { ...this.customHeaders };
     }
 
     private emit(event: ApiManagerErrors, payload: any) {
@@ -41,6 +55,12 @@ export class ApiManager {
 
     private getHeaders(): Headers {
         const headers = new Headers();
+
+        // Add custom headers first
+        Object.entries(this.customHeaders).forEach(([key, value]) => {
+            headers.set(key, value);
+        });
+
         if (this.auth.type === 'bearer') {
             headers.set('Authorization', `Bearer ${this.auth.token}`);
         }
@@ -60,6 +80,7 @@ export class ApiManager {
         endpoint: string,
         body?: Record<string, any>,
         params?: Record<string, any>,
+        requestHeaders?: Record<string, string>,
     ): Promise<{ data: T }> {
         const url = new URL(this.normalizeUrl(endpoint));
 
@@ -70,6 +91,14 @@ export class ApiManager {
         }
 
         const headers = this.getHeaders();
+
+        // Add request-specific headers
+        if (requestHeaders) {
+            Object.entries(requestHeaders).forEach(([key, value]) => {
+                headers.set(key, value);
+            });
+        }
+
         const options: RequestInit = {
             method,
             headers,
@@ -126,31 +155,43 @@ export class ApiManager {
         }
     }
 
-    get<T = any>(endpoint: string, params?: Record<string, any>) {
-        return this.request<T>('GET', endpoint, undefined, params);
+    get<T = any>(endpoint: string, params?: Record<string, any>, headers?: Record<string, string>) {
+        return this.request<T>('GET', endpoint, undefined, params, headers);
     }
 
-    post<T = any>(endpoint: string, body?: Record<string, any>) {
-        return this.request<T>('POST', endpoint, body);
+    post<T = any>(endpoint: string, body?: Record<string, any>, headers?: Record<string, string>) {
+        return this.request<T>('POST', endpoint, body, undefined, headers);
     }
 
-    put<T = any>(endpoint: string, body?: Record<string, any>) {
-        return this.request<T>('PUT', endpoint, body);
+    put<T = any>(endpoint: string, body?: Record<string, any>, headers?: Record<string, string>) {
+        return this.request<T>('PUT', endpoint, body, undefined, headers);
     }
 
-    patch<T = any>(endpoint: string, body?: Record<string, any>) {
-        return this.request<T>('PATCH', endpoint, body);
+    patch<T = any>(endpoint: string, body?: Record<string, any>, headers?: Record<string, string>) {
+        return this.request<T>('PATCH', endpoint, body, undefined, headers);
     }
 
-    delete<T = any>(endpoint: string, params?: Record<string, any>) {
-        return this.request<T>('DELETE', endpoint, undefined, params);
+    delete<T = any>(
+        endpoint: string,
+        params?: Record<string, any>,
+        headers?: Record<string, string>,
+    ) {
+        return this.request<T>('DELETE', endpoint, undefined, params, headers);
     }
 
-    options<T = any>(endpoint: string, params?: Record<string, any>) {
-        return this.request<T>('OPTIONS', endpoint, undefined, params);
+    options<T = any>(
+        endpoint: string,
+        params?: Record<string, any>,
+        headers?: Record<string, string>,
+    ) {
+        return this.request<T>('OPTIONS', endpoint, undefined, params, headers);
     }
 
-    head<T = any>(endpoint: string, params?: Record<string, any>) {
-        return this.request<T>('HEAD', endpoint, undefined, params);
+    head<T = any>(
+        endpoint: string,
+        params?: Record<string, any>,
+        headers?: Record<string, string>,
+    ) {
+        return this.request<T>('HEAD', endpoint, undefined, params, headers);
     }
 }
