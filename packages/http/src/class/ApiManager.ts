@@ -144,7 +144,7 @@ export class ApiManager {
                 return { data: buffer as any };
             }
 
-            return { data: {} as any };
+            return { data: { status: res.status } as any };
         } catch (err) {
             this.emit(ApiManagerErrors.Error, err);
             if (this.throwErrors) {
