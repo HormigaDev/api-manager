@@ -131,7 +131,8 @@ export class ApiManager {
 
             if (this.format === 'json') {
                 const data = await res.json();
-                return { data: data as T };
+                (res as any).data = data as T;
+                return res as unknown as { data: T };
             }
 
             if (this.format === 'xml') {
@@ -143,8 +144,8 @@ export class ApiManager {
                 const buffer = await res.arrayBuffer();
                 return { data: buffer as any };
             }
-
-            return { data: { status: res.status } as any };
+            (res as any).data = {} as any;
+            return res as any;
         } catch (err) {
             this.emit(ApiManagerErrors.Error, err);
             if (this.throwErrors) {
