@@ -132,7 +132,7 @@ export class ApiManager {
             if (this.format === 'json') {
                 const data = await res.json();
                 (res as any).data = data as T;
-                return res as unknown as { data: T };
+                return res as any;
             }
 
             if (this.format === 'xml') {
